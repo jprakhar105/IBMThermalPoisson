@@ -15,6 +15,8 @@
 #include <functional>
 #include <cstdlib>
 #include <string>
+#include <windows.h>
+#include <psapi.h>
 
 #include "mesh.h"
 #include "flowParameters.h"
@@ -56,6 +58,17 @@ void plot_ibm_results() {
     pyFile.close();
 
     std::system("python plot_ibm.py");
+}
+
+void printMemoryUsage() {
+    PROCESS_MEMORY_COUNTERS pmc;
+    if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc))) {
+        std::cout << "\n========================================\n";
+        std::cout << "Memory Usage Profile:\n";
+        std::cout << "Peak Memory Consumed: " << (pmc.PeakWorkingSetSize / (1024.0 * 1024.0)) << " MB\n";
+        std::cout << "Current Memory Usage: " << (pmc.WorkingSetSize / (1024.0 * 1024.0)) << " MB\n";
+        std::cout << "========================================\n";
+    }
 }
 
 int main(){
@@ -144,5 +157,6 @@ int main(){
     plot_ibm_results();
     
     std::cout << "IBM Benchmark Testing Complete.\n";
+    printMemoryUsage();
     return 0;
 }

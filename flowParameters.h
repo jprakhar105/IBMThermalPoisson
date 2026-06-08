@@ -29,7 +29,6 @@ struct Flow {
     void setParameters();
 
     // Global matrices
-    std::vector<std::vector<double>> Ktau;
     CSR K_tau;
 
     // Global Vectors
